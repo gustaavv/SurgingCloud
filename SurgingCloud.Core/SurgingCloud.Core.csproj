@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!--        <PackageReference Include="ByteSize" Version="2.1.2"/>-->
+        <PackageReference Include="Dapper" Version="2.1.66"/>
+        <PackageReference Include="System.Data.SQLite" Version="1.0.118"/>
+
+<!--        <PackageReference Include="Serilog" Version="4.1.0"/>-->
+<!--        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>-->
+<!--        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0"/>-->
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="resources\**\*"/>
+    </ItemGroup>
+</Project>

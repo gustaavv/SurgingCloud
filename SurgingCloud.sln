@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurgingCloud.Core", "SurgingCloud.Core\SurgingCloud.Core.csproj", "{2EE231C7-D21E-4BA7-83D9-42D8C6B19251}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurgingCloud.Cli", "SurgingCloud.Cli\SurgingCloud.Cli.csproj", "{F604F46E-C1E7-4519-A2A0-FA86B9C93764}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EE231C7-D21E-4BA7-83D9-42D8C6B19251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EE231C7-D21E-4BA7-83D9-42D8C6B19251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EE231C7-D21E-4BA7-83D9-42D8C6B19251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EE231C7-D21E-4BA7-83D9-42D8C6B19251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F604F46E-C1E7-4519-A2A0-FA86B9C93764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F604F46E-C1E7-4519-A2A0-FA86B9C93764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F604F46E-C1E7-4519-A2A0-FA86B9C93764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F604F46E-C1E7-4519-A2A0-FA86B9C93764}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
