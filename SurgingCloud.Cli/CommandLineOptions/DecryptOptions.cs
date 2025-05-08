@@ -9,5 +9,5 @@ public class DecryptOptions : BaseOptions
     public bool ByPath { get; set; }
 
     [Option("encpath", HelpText = "The encrypted file path")]
-    public string encFilePath { get; set; }
+    public string EncFilePath { get; set; }
 }

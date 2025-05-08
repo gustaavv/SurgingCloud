@@ -12,5 +12,5 @@ public class ConfigOptions : BaseOptions
     public bool GetConfig { get; set; }
 
     [Option("rar", HelpText = "Path to rar.exe")]
-    public string RarPath { get; set; }
+    public string? RarPath { get; set; }
 }

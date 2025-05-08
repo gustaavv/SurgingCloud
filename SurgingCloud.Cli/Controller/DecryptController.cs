@@ -14,12 +14,12 @@ public class DecryptController
 
     public void DecryptFilepath(DecryptOptions opt)
     {
-        if (string.IsNullOrWhiteSpace(opt.encFilePath))
+        if (string.IsNullOrWhiteSpace(opt.EncFilePath))
         {
             Console.WriteLine("Please enter the encrypted file path");
         }
 
-        var decryptFilepath = _decryptService.DecryptFilepath(opt.encFilePath, opt.SubjectId);
+        var decryptFilepath = _decryptService.DecryptFilepath(opt.EncFilePath, opt.SubjectId);
 
         Console.WriteLine(
             "The file path is decrypted by each path item. If an path item can not be decrypted, it will be <original item name>");
