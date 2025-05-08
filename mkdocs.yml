@@ -1,0 +1,104 @@
+site_name: SurgingCloud
+site_url: https://gustaavv.github.io/SurgingCloud
+repo_url: https://github.com/gustaavv/SurgingCloud
+site_author: Gustaavv
+copyright: Copyright &copy; 2025 Gustaavv
+
+nav:
+  - Home:
+      - index.md
+  - Installation:
+      - installation/index.md
+      - installation/windows.md
+  - Usage:
+      - usage/index.md
+      - usage/hello.md
+      - usage/config.md
+      - usage/subject.md
+      - usage/encrypt.md
+      - usage/util.md
+      - usage/decrypt.md
+  - Developer Guide:
+      - develop/index.md
+  - Miscellaneous:
+      - misc/index.md
+
+theme:
+  # logo: icon.svg
+  name: material
+  font:
+    code: JetBrains Mono
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - header.autohide
+    # - navigation.footer
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gustaavv/SurgingCloud
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - footnotes
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - tables
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
