@@ -12,12 +12,12 @@ public class DecryptService
         _itemDao = itemDao;
     }
 
-    public string DecryptFilepath(string encFilePath, Subject subject)
+    public string DecryptFilepath(string encFilePath, long subjectId)
     {
         var list = encFilePath.Split('/').Select(s =>
         {
             s = s.Trim();
-            var item = _itemDao.SelectByNameAfter(subject.Id, s);
+            var item = _itemDao.SelectByNameAfter(subjectId, s);
             return item == null ? $"<{s}>" : item.NameBefore;
         }).ToList();
         return string.Join('/', list);

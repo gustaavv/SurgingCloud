@@ -21,19 +21,20 @@ public class SubjectService
     {
         return _subjectDao.SelectById(id);
     }
-    
-    public (bool, string) CreateSubject(Subject subject)
+
+    public (bool b, string msg) CreateSubject(Subject subject)
     {
         if (_subjectDao.SelectByName(subject.Name) != null)
         {
-            return (false, "Subject with the same name already exists");
+            return (false, "Creation fails. Subject with the same name already exists");
         }
 
         if (subject.Password.Length == 0)
         {
-            return (false, "Subject password cannot be empty");
+            return (false, "Creation fails. Subject password cannot be empty");
         }
 
-        return (_subjectDao.Insert(subject) > 0, "");
+        var b = _subjectDao.Insert(subject) > 0;
+        return (b, b ? "" : "Insertion into database failed");
     }
 }

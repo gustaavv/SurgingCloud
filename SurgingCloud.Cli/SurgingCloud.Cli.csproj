@@ -7,4 +7,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="ConsoleTables" Version="2.6.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SurgingCloud.Core\SurgingCloud.Core.csproj"/>
+    </ItemGroup>
+
 </Project>

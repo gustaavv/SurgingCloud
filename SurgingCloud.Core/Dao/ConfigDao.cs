@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
+using Dapper.Transaction;
 using SurgingCloud.Core.Model.Entity;
 
 namespace SurgingCloud.Core.Dao;
@@ -28,16 +30,20 @@ public class ConfigDao : BaseDao
         conn.Execute(createTableSql);
     }
 
-    public Config Select()
+    public Config Select(IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = "SELECT * FROM Config WHERE Id = 1";
+        if (tx != null)
+        {
+            return tx.QuerySingle<Config>(sql);
+        }
+
+        using var conn = CreateConnection();
         return conn.QuerySingle<Config>(sql);
     }
 
-    public int Update(Config config)
+    public int Update(Config config, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = @"
             UPDATE Config
             SET RarPath = @RarPath,
@@ -46,6 +52,12 @@ public class ConfigDao : BaseDao
                 BackupFolderPath = @BackupFolderPath
             WHERE Id = 1
             ";
+        if (tx != null)
+        {
+            return tx.Execute(sql, config);
+        }
+
+        using var conn = CreateConnection();
         return conn.Execute(sql, config);
     }
 }

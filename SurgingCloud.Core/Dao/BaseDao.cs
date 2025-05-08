@@ -24,7 +24,7 @@ public abstract class BaseDao
 
     protected abstract void CreateTablesIfNeeded();
 
-    protected IDbConnection CreateConnection()
+    public IDbConnection CreateConnection()
     {
         return new SQLiteConnection(ConnectionString);
     }

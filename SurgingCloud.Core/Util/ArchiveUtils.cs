@@ -19,7 +19,7 @@ public static class ArchiveUtils
     {
         if (!File.Exists(RarPath))
         {
-            throw new FileNotFoundException($"'{RarPath}' is not a valid path for rar");
+            throw new FileNotFoundException($"'{RarPath}' is not a valid path for rar.exe");
         }
 
         if (File.Exists(target) || Directory.Exists(target))

@@ -1,4 +1,5 @@
-﻿using SurgingCloud.Core.Dao;
+﻿using System.Data;
+using SurgingCloud.Core.Dao;
 using SurgingCloud.Core.Model.Entity;
 
 namespace SurgingCloud.Core.Service;
@@ -12,20 +13,26 @@ public class ConfigService
         _configDao = configDao;
     }
 
-    public (bool, string) ValidateConfig()
+    public (bool b, string msg) ValidateConfig(IDbTransaction? tx = null)
     {
-        var config = _configDao.Select();
+        var config = _configDao.Select(tx: tx);
 
         if (!File.Exists(config.RarPath))
         {
             return (false, $"Rar path is invalid: {config.RarPath}");
         }
 
-        return (true, "");
+        return (true, "Config validation succeeds");
     }
 
-    public int UpdateConfig(Config config)
+    public Config GetConfig()
     {
-        return _configDao.Update(config);
+        return _configDao.Select();
+    }
+
+    public (bool b, string msg) UpdateConfig(Config config)
+    {
+        var b = _configDao.Update(config) > 0;
+        return (b, b ? "Update succeeds" : "Update fails");
     }
 }

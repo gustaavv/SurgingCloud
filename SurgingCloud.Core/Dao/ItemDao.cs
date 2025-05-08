@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
+using Dapper.Transaction;
 using SurgingCloud.Core.Model.Entity;
 
 namespace SurgingCloud.Core.Dao;
@@ -26,45 +28,74 @@ public class ItemDao : BaseDao
                 SizeAfter  INTEGER NULL,
                 CreateAt   TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE INDEX IF NOT EXISTS idx_item_hashbefore ON Item (HashBefore);
+
+            CREATE INDEX IF NOT EXISTS idx_item_nameafter ON Item (NameAfter);
         ";
         conn.Execute(createTableSql);
     }
 
-    public Item? SelectById(long id)
+    public Item? SelectById(long id, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = "SELECT * FROM Item WHERE Id = @Id";
+        if (tx != null)
+        {
+            return tx.QueryFirstOrDefault<Item>(sql, new { Id = id });
+        }
+
+        using var conn = CreateConnection();
         return conn.QueryFirstOrDefault<Item>(sql, new { Id = id });
     }
 
-    public Item? SelectByHashBefore(long subjectId, string hashBefore)
+    public Item? SelectByHashBefore(long subjectId, string hashBefore, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = "SELECT * FROM Item WHERE SubjectId = @SubjectId AND HashBefore = @HashBefore";
-        return conn.QueryFirstOrDefault<Item>(sql, new { Id = subjectId, HashBefore = hashBefore });
+        if (tx != null)
+        {
+            return tx.QueryFirstOrDefault<Item>(sql, new { SubjectId = subjectId, HashBefore = hashBefore });
+        }
+
+        using var conn = CreateConnection();
+        return conn.QueryFirstOrDefault<Item>(sql, new { SubjectId = subjectId, HashBefore = hashBefore });
     }
 
-    public Item? SelectByNameAfter(long subjectId, string nameAfter)
+    public Item? SelectByNameAfter(long subjectId, string nameAfter, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = "SELECT * FROM Item WHERE SubjectId = @SubjectId AND NameAfter = @NameAfter";
-        return conn.QueryFirstOrDefault<Item>(sql, new { Id = subjectId, NameAfter = nameAfter });
+        if (tx != null)
+        {
+            return tx.QueryFirstOrDefault<Item>(sql, new { SubjectId = subjectId, NameAfter = nameAfter });
+        }
+
+        using var conn = CreateConnection();
+        return conn.QueryFirstOrDefault<Item>(sql, new { SubjectId = subjectId, NameAfter = nameAfter });
     }
 
-    public int Insert(Item item)
+    public int Insert(Item item, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = @"
             INSERT INTO Item(SubjectId, NameBefore, NameAfter, ItemType, HashBefore, HashAfter, SizeBefore, SizeAfter)
             VALUES (@SubjectId, @NameBefore, @NameAfter, @ItemType, @HashBefore, @HashAfter, @SizeBefore, @SizeAfter)
         ";
+        if (tx != null)
+        {
+            return tx.Execute(sql, item);
+        }
+
+        using var conn = CreateConnection();
         return conn.Execute(sql, item);
     }
 
-    public int Delete(long id)
+    public int Delete(long id, IDbTransaction? tx = null)
     {
-        using var conn = CreateConnection();
         const string sql = "DELETE FROM Item WHERE Id = @Id;";
+        if (tx != null)
+        {
+            return tx.Execute(sql, new { Id = id });
+        }
+
+        using var conn = CreateConnection();
         return conn.Execute(sql, new { Id = id });
     }
 }
