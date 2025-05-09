@@ -1,3 +1,10 @@
-﻿# SurgingCloud
+﻿<div style="margin: 0 auto; max-width: 75%;">
 
-Encrypts your data before uploading them to cloud drives. This tool features privacy, data security and data recoverability.
+<h1 style="display: flex; gap: 16px; align-items: center; justify-content: center; margin: 0 auto; margin-bottom: 24px;">
+  <img src="./docs/twemoji-2601.svg" width="75px" alt="SurgingCloud icon"/>
+  <span style="font-size: 64px;">SurgingCloud</span>
+</h1>
+
+<p style="font-size: 18px;">Encrypts your data before uploading them to cloud drives. This tool features privacy, data security and data recoverability.</p>
+
+</div>
