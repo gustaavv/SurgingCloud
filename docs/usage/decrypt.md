@@ -1,5 +1,5 @@
 ---
-title: Decrypt
+title: Decrypt Operation
 ---
 
 ## Decrypt by file path

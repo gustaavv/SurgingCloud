@@ -11,3 +11,4 @@ site
 TODO.md
 /**/*.db
 SurgingCloud.sln.DotSettings.user
+/**/publish

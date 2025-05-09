@@ -11,6 +11,7 @@ nav:
   - Installation:
       - installation/index.md
       - installation/windows.md
+      - installation/source.md
   - Usage:
       - usage/index.md
       - usage/hello.md
