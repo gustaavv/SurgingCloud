@@ -1,6 +1,7 @@
 site_name: SurgingCloud
 site_url: https://gustaavv.github.io/SurgingCloud
 repo_url: https://github.com/gustaavv/SurgingCloud
+edit_uri: https://github.com/gustaavv/SurgingCloud/tree/master/docs/
 site_author: Gustaavv
 copyright: Copyright &copy; 2025 Gustaavv
 
@@ -22,9 +23,11 @@ nav:
       - develop/index.md
   - Miscellaneous:
       - misc/index.md
+      - misc/3rd-party.md
 
 theme:
-  # logo: icon.svg
+  logo: twemoji-2601.svg
+  favicon: twemoji-2601.svg
   name: material
   font:
     code: JetBrains Mono
@@ -59,6 +62,7 @@ theme:
     - content.code.copy
     - content.code.select
     - content.tabs.link
+    - content.action.edit
 
 extra:
   social:
