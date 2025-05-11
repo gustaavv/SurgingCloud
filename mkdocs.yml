@@ -22,6 +22,7 @@ nav:
       - usage/decrypt.md
   - Developer Guide:
       - develop/index.md
+      - develop/env.md
   - Miscellaneous:
       - misc/index.md
       - misc/3rd-party.md
@@ -31,6 +32,7 @@ theme:
   favicon: twemoji-2601.svg
   name: material
   font:
+    text: Inter
     code: JetBrains Mono
   palette:
     # Palette toggle for light mode
