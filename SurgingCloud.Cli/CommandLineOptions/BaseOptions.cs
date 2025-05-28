@@ -18,4 +18,7 @@ public abstract class BaseOptions
 
     [Option("hashAlg", Default = 0, HelpText = "Hash algorithm enum value. 0: SHA256; 1: SHA1; 2: MD5")]
     public HashAlg HashAlg { get; set; }
+
+    [Option("out-json", Default = false, HelpText = "Output int JSON format")]
+    public bool JsonFormatOutput { get; set; }
 }

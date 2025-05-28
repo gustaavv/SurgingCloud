@@ -101,12 +101,12 @@ public static class CliApplication
                 }
                 else if (opt.ListSubjects)
                 {
-                    subjectController.ListAllSubjects();
+                    subjectController.ListAllSubjects(opt);
                     return;
                 }
                 else if (opt.GetSubject)
                 {
-                    subjectController.GetSubject(opt);
+                    await subjectController.GetSubject(opt);
                     return;
                 }
 
