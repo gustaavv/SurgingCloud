@@ -19,4 +19,8 @@ public class EncryptOptions : BaseOptions
 
     [Option("overwrite", HelpText = "Overwrite existing files in the out path with the same name", Default = false)]
     public bool Overwrite { get; set; }
+
+    [Option("ignore-dup", HelpText = "Ignore encryption if there is an item with the same hashBefore in the database",
+        Default = true)]
+    public bool IgnoreIfDuplicateInDb { get; set; }
 }

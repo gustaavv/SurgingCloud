@@ -20,7 +20,6 @@ public class EncryptController
             return;
         }
 
-
         if (opt.OutPath == null)
         {
             Console.WriteLine("Please enter the folder path to generate the encrypted file/folder");
@@ -33,7 +32,8 @@ public class EncryptController
             Console.WriteLine($"Output folder created: {opt.OutPath}");
         }
 
-        var (_, msg) = await _encryptService.EncryptItem(opt.SourcePath, opt.SubjectId, opt.OutPath);
+        var (_, msg) =
+            await _encryptService.EncryptItem(opt.SourcePath, opt.SubjectId, opt.OutPath, opt.IgnoreIfDuplicateInDb);
         Console.WriteLine(msg);
     }
 }

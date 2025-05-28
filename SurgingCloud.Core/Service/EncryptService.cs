@@ -40,7 +40,9 @@ public class EncryptService
     /// <summary>
     /// Create an item, generate encrypted file/folder and insert the item into database.
     /// </summary>
-    public async Task<(bool b, string msg)> EncryptItem(string srcPath, long subjectId, string encOutputPath)
+    /// <param name="ignoreIfDuplicateInDb">useful for incremental encryption in a same subject</param>
+    public async Task<(bool b, string msg)> EncryptItem(string srcPath, long subjectId, string encOutputPath,
+        bool ignoreIfDuplicateInDb)
     {
         if (!(File.Exists(srcPath) || Directory.Exists(srcPath)))
         {
@@ -79,6 +81,15 @@ public class EncryptService
                         ? await HashUtils.ComputeFileHash(srcPath, subject.HashAlg)
                         : nameBefore;
                     var nameAfter = await _hashService.HashFilename(nameBefore, subject.HashAlg);
+
+                    var itemWithSameHashBefore = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx);
+
+                    if (itemWithSameHashBefore != null && ignoreIfDuplicateInDb)
+                    {
+                        tx.Commit();
+                        return (true,
+                            "Item with same hashBefore already exists in database. No encrypted file generated.");
+                    }
 
                     string? hashAfter = null;
                     long? sizeAfter = null;
@@ -123,7 +134,7 @@ public class EncryptService
 
                     var encDigest = $"src: {Path.GetFullPath(srcPath)}\nout: {Path.GetFullPath(targetPath)}";
 
-                    if (_itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx) != null)
+                    if (itemWithSameHashBefore != null)
                     {
                         tx.Commit();
                         return (true,
