@@ -22,7 +22,7 @@ This page lists the 3rd-party libraries this project uses.
 - xunit
 - xunit.runner.visualstudio
 
-## docs
+## Documentation
 
 - mkdocs
 - mkdocs-material
