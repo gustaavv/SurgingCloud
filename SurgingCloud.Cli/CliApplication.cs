@@ -52,7 +52,7 @@ public static class CliApplication
         }
         else
         {
-            Console.WriteLine($"Using existing database file at {baseOptions.DbFilePath}");
+            // Console.WriteLine($"Using existing database file at {baseOptions.DbFilePath}");
         }
 
         var iocContainer = BuildIocContainer(baseOptions.DbFilePath);
@@ -107,6 +107,10 @@ public static class CliApplication
                 else if (opt.GetSubject)
                 {
                     await subjectController.GetSubject(opt);
+                    return;
+                } else if (opt.DeleteSubject)
+                {
+                    subjectController.DeleteSubject(opt);
                     return;
                 }
 

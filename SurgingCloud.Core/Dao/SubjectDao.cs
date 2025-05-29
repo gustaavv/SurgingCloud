@@ -95,7 +95,7 @@ public class SubjectDao : BaseDao
         return conn.Execute(sql, subject);
     }
 
-    public int Delete(int id, IDbTransaction? tx = null)
+    public int Delete(long id, IDbTransaction? tx = null)
     {
         const string sql = "DELETE FROM Subject WHERE Id = @Id";
         if (tx != null)

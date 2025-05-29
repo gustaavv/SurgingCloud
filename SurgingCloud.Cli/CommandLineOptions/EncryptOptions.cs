@@ -21,6 +21,6 @@ public class EncryptOptions : BaseOptions
     public bool Overwrite { get; set; }
 
     [Option("ignore-dup", HelpText = "Ignore encryption if there is an item with the same hashBefore in the database",
-        Default = true)]
+        Default = false)]
     public bool IgnoreIfDuplicateInDb { get; set; }
 }

@@ -89,7 +89,7 @@ public class ItemDao : BaseDao
 
     public int Delete(long id, IDbTransaction? tx = null)
     {
-        const string sql = "DELETE FROM Item WHERE Id = @Id;";
+        const string sql = "DELETE FROM Item WHERE Id = @Id";
         if (tx != null)
         {
             return tx.Execute(sql, new { Id = id });
@@ -97,5 +97,17 @@ public class ItemDao : BaseDao
 
         using var conn = CreateConnection();
         return conn.Execute(sql, new { Id = id });
+    }
+
+    public int DeleteBySubjectId(long subjectId, IDbTransaction? tx = null)
+    {
+        const string sql = "DELETE FROM Item WHERE SubjectId = @SubjectId";
+        if (tx != null)
+        {
+            return tx.Execute(sql, new { SubjectId = subjectId });
+        }
+
+        using var conn = CreateConnection();
+        return conn.Execute(sql, new { SubjectId = subjectId });
     }
 }

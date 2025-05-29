@@ -14,8 +14,9 @@ public class SubjectOptions : BaseOptions
     [Option('g', "get", HelpText = "Get subject", Default = false, SetName = "get")]
     public bool GetSubject { get; set; }
 
+    [Option('d', "delete", HelpText = "Delete subject", Default = false, SetName = "delete")]
+    public bool DeleteSubject { get; set; }
+
     [Option("name", HelpText = "Subject name")]
     public string? Name { get; set; }
-
-
 }

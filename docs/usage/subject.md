@@ -3,7 +3,7 @@ title: Subject Operation
 ---
 
 
-## Create new subject
+## Create a new subject
 
 ```powershell
 .\SurgingCloud.Cli.exe subject --db "path/to/db" --new --name "subject name" --pwd "subject password" --hashAlg 0
@@ -19,4 +19,10 @@ title: Subject Operation
 
 ```powershell
 .\SurgingCloud.Cli.exe subject --db "path/to/db" --get --sid 0
+```
+
+## Delete a subject
+
+```powershell
+.\SurgingCloud.Cli.exe subject --db "path/to/db" --delete --sid 0
 ```

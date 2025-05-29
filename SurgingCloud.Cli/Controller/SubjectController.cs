@@ -78,4 +78,10 @@ public class SubjectController
         var (b, msg) = _subjectService.CreateSubject(subject);
         Console.WriteLine(b ? "Creation succeeds" : msg);
     }
+
+    public void DeleteSubject(SubjectOptions opt)
+    {
+        var (_, msg) = _subjectService.DeleteSubject(opt.SubjectId);
+        Console.WriteLine(msg);
+    }
 }
