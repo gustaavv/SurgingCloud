@@ -26,3 +26,9 @@ title: Subject Operation
 ```powershell
 .\SurgingCloud.Cli.exe subject --db "path/to/db" --delete --sid 0
 ```
+
+## List all items in a subject
+
+```powershell
+.\SurgingCloud.Cli.exe subject --db "path/to/db" --list-items --sid 0
+```

@@ -21,12 +21,6 @@ public class SubjectController
 
     public void ListAllSubjects(SubjectOptions opt)
     {
-        var consoleTable = new ConsoleTable(new ConsoleTableOptions
-        {
-            Columns = new[] { "id", "name", "password", "hash algorithm" },
-            EnableCount = true
-        });
-
         var subjects = _subjectService.GetAllSubjects();
 
         if (opt.JsonFormatOutput)
@@ -34,6 +28,12 @@ public class SubjectController
             Console.WriteLine(JsonUtils.ToStr(subjects, pretty: true));
             return;
         }
+
+        var consoleTable = new ConsoleTable(new ConsoleTableOptions
+        {
+            Columns = new[] { "id", "name", "password", "hash algorithm" },
+            EnableCount = true
+        });
 
         subjects.ForEach(s => { consoleTable.AddRow(s.Id, s.Name, s.Password, s.HashAlg); });
 
@@ -83,5 +83,30 @@ public class SubjectController
     {
         var (_, msg) = _subjectService.DeleteSubject(opt.SubjectId);
         Console.WriteLine(msg);
+    }
+
+
+    public void ListAllItems(SubjectOptions opt)
+    {
+        var items = _subjectService.GetAllItems(opt.SubjectId);
+
+        if (opt.JsonFormatOutput)
+        {
+            Console.WriteLine(JsonUtils.ToStr(items, pretty: true));
+            return;
+        }
+
+        var consoleTable = new ConsoleTable(new ConsoleTableOptions
+        {
+            Columns = new[] { "id", "name before", "name after", "item type", "hash before", "hash after" },
+            EnableCount = true
+        });
+
+        items.ForEach(e =>
+        {
+            consoleTable.AddRow(e.Id, e.NameBefore, e.NameAfter, e.ItemType, e.HashBefore, e.HashAfter);
+        });
+
+        consoleTable.Write();
     }
 }

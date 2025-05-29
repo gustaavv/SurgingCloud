@@ -48,6 +48,18 @@ public class ItemDao : BaseDao
         return conn.QueryFirstOrDefault<Item>(sql, new { Id = id });
     }
 
+    public List<Item> SelectBySubjectId(long subjectId, IDbTransaction? tx = null)
+    {
+        const string sql = "SELECT * FROM Item WHERE SubjectId = @SubjectId";
+        if (tx != null)
+        {
+            return tx.Query<Item>(sql, new { SubjectId = subjectId }).ToList();
+        }
+
+        using var conn = CreateConnection();
+        return conn.Query<Item>(sql, new { SubjectId = subjectId }).ToList();
+    }
+
     public Item? SelectByHashBefore(long subjectId, string hashBefore, IDbTransaction? tx = null)
     {
         const string sql = "SELECT * FROM Item WHERE SubjectId = @SubjectId AND HashBefore = @HashBefore";

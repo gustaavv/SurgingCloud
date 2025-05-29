@@ -108,10 +108,15 @@ public static class CliApplication
                 {
                     await subjectController.GetSubject(opt);
                     return;
-                } else if (opt.DeleteSubject)
+                }
+                else if (opt.DeleteSubject)
                 {
                     subjectController.DeleteSubject(opt);
                     return;
+                }
+                else if (opt.ListItems)
+                {
+                    subjectController.ListAllItems(opt);
                 }
 
                 break;

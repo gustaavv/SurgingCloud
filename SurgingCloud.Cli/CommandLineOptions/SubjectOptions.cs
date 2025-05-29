@@ -17,6 +17,9 @@ public class SubjectOptions : BaseOptions
     [Option('d', "delete", HelpText = "Delete subject", Default = false, SetName = "delete")]
     public bool DeleteSubject { get; set; }
 
+    [Option("list-items", HelpText = "List all items in a subject", Default = false, SetName = "list-items")]
+    public bool ListItems { get; set; }
+
     [Option("name", HelpText = "Subject name")]
     public string? Name { get; set; }
 }

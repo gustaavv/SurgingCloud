@@ -20,6 +20,11 @@ public class SubjectService
         return _subjectDao.Select();
     }
 
+    public List<Item> GetAllItems(long subjectId)
+    {
+        return _itemDao.SelectBySubjectId(subjectId);
+    }
+
     public Subject? GetSubjectById(long id)
     {
         return _subjectDao.SelectById(id);
