@@ -50,7 +50,6 @@ jobs:
       - name: Generate Release note
         shell: pwsh
         run: |
-          Add-Content -Path body.md -Value "# SurgingCloud ${{ env.TAG }}`n"
           Add-Content -Path body.md -Value "## File checksum`n"
           Add-Content -Path body.md -Value "| checksum | value |"
           Add-Content -Path body.md -Value "| -------- | ----- |"
@@ -69,5 +68,6 @@ jobs:
       - name: Upload to GitHub release
         uses: ncipollo/release-action@v1
         with:
+          name: SurgingCloud ${{ env.TAG }}
           artifacts: ./publish/SurgingCloud-${{ env.TAG }}-win64.zip
           bodyFile: body.md      
