@@ -23,5 +23,48 @@ jobs:
             Write-Output "::error::Tag mismatch! Run tag: $TAG, .csproj version: $CS_VERSION"
             exit 1
           }
-        
+          
           Write-Output "Validation succeeds, version number = $TAG"
+          echo "TAG=$TAG" >> $env:GITHUB_ENV
+
+      - name: Setup DotNet Environment
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build and publish
+        shell: pwsh
+        run: |
+          dotnet publish ./SurgingCloud.Cli/SurgingCloud.Cli.csproj -c Release -o ./publish/SurgingCloud
+
+      - name: Make artifacts
+        shell: pwsh
+        run: |
+          cd publish
+          Compress-Archive -Path ./SurgingCloud -DestinationPath ./SurgingCloud-${{ env.TAG }}-win64.zip
+          cd ..
+
+      - name: Generate Release note
+        shell: pwsh
+        run: |
+          Add-Content -Path body.md -Value "# SurgingCloud ${{ env.TAG }}`n"
+          Add-Content -Path body.md -Value "## File checksum`n"
+          Add-Content -Path body.md -Value "| checksum | value |"
+          Add-Content -Path body.md -Value "| -------- | ----- |"
+
+          $zipPath = "./publish/SurgingCloud-${{ env.TAG }}-win64.zip"
+
+          $sha256 = Get-FileHash $zipPath -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+          $sha1 = Get-FileHash $zipPath -Algorithm SHA1 | Select-Object -ExpandProperty Hash
+          $md5 = Get-FileHash $zipPath -Algorithm MD5 | Select-Object -ExpandProperty Hash
+
+          Add-Content -Path body.md -Value "| SHA256   | $sha256 |"
+          Add-Content -Path body.md -Value "| SHA1   | $sha1 |"
+          Add-Content -Path body.md -Value "| MD5   | $md5 |"
+          Add-Content -Path body.md -Value "`n"
+
+      - name: Upload to GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ./publish/SurgingCloud-${{ env.TAG }}-win64.zip
+          bodyFile: body.md      
