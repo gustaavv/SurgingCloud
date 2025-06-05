@@ -51,7 +51,12 @@ public record Item
     public long? SizeAfter { get; set; }
 
     /// <summary>
-    /// When the item (not the file/folder) was created
+    /// The time when the item (not the file/folder) was created.
     /// </summary>
     public DateTime CreateAt { get; set; }
+
+    /// <summary>
+    /// For future use.
+    /// </summary>
+    public string Others { get; set; }
 };

@@ -46,13 +46,16 @@ public static class CliApplication
             return;
         }
 
-        if (!File.Exists(baseOptions.DbFilePath))
+        if (!baseOptions.JsonFormatOutput)
         {
-            Console.WriteLine($"Create a new database file at {baseOptions.DbFilePath}");
-        }
-        else
-        {
-            // Console.WriteLine($"Using existing database file at {baseOptions.DbFilePath}");
+            if (!File.Exists(baseOptions.DbFilePath))
+            {
+                Console.WriteLine($"Create a new database file at {baseOptions.DbFilePath}");
+            }
+            else
+            {
+                Console.WriteLine($"Using existing database file at {baseOptions.DbFilePath}");
+            }
         }
 
         var iocContainer = BuildIocContainer(baseOptions.DbFilePath);

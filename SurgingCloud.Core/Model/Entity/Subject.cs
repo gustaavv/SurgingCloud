@@ -15,7 +15,7 @@ public record Subject
     public string Name { get; set; }
 
     /// <summary>
-    /// Subject password. Stored in plan text
+    /// Subject password. Stored in plan text.
     /// </summary>
     public string Password { get; set; }
 
@@ -25,12 +25,17 @@ public record Subject
     public HashAlg HashAlg { get; set; } = HashAlg.Sha256;
 
     /// <summary>
-    /// When the subject was created
+    /// The time when the subject was created.
     /// </summary>
     public DateTime CreateAt { get; set; }
 
     /// <summary>
-    /// When the subject was last updated
+    /// The time when the subject was last updated.
     /// </summary>
     public DateTime UpdateAt { get; set; }
+
+    /// <summary>
+    /// For future use.
+    /// </summary>
+    public string Others { get; set; }
 }

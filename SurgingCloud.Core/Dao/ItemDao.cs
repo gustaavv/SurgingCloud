@@ -26,7 +26,8 @@ public class ItemDao : BaseDao
                 HashAfter  TEXT    NULL,
                 SizeBefore INTEGER NULL,
                 SizeAfter  INTEGER NULL,
-                CreateAt   TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
+                CreateAt   TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                Others     TEXT    NULL
             );
 
             CREATE INDEX IF NOT EXISTS idx_item_hashbefore ON Item (HashBefore);
@@ -87,8 +88,8 @@ public class ItemDao : BaseDao
     public int Insert(Item item, IDbTransaction? tx = null)
     {
         const string sql = @"
-            INSERT INTO Item(SubjectId, NameBefore, NameAfter, ItemType, HashBefore, HashAfter, SizeBefore, SizeAfter)
-            VALUES (@SubjectId, @NameBefore, @NameAfter, @ItemType, @HashBefore, @HashAfter, @SizeBefore, @SizeAfter)
+            INSERT INTO Item(SubjectId, NameBefore, NameAfter, ItemType, HashBefore, HashAfter, SizeBefore, SizeAfter, Others)
+            VALUES (@SubjectId, @NameBefore, @NameAfter, @ItemType, @HashBefore, @HashAfter, @SizeBefore, @SizeAfter, @Others)
         ";
         if (tx != null)
         {
