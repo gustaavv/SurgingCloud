@@ -20,12 +20,12 @@ public class ConfigDao : BaseDao
                 Id                          INTEGER NOT NULL PRIMARY KEY,
                 RarPath                     TEXT    NULL,
                 CheckUpdateFrequencyInHours INTEGER NOT NULL,
-                BackupFrequencyInDays       INTEGER NOT NULL,
-                BackupFolderPath            TEXT    NULL
+                LastCheckUpdateAt           TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                Others                      TEXT    NULL
             );
 
-            INSERT OR IGNORE INTO Config (Id, RarPath, CheckUpdateFrequencyInHours, BackupFrequencyInDays, BackupFolderPath)
-            VALUES (1, NULL, 24, 7, NULL);
+            INSERT OR IGNORE INTO Config (Id, RarPath, CheckUpdateFrequencyInHours)
+            VALUES (1, NULL, 24);
         ";
         conn.Execute(createTableSql);
     }
@@ -48,8 +48,8 @@ public class ConfigDao : BaseDao
             UPDATE Config
             SET RarPath = @RarPath,
                 CheckUpdateFrequencyInHours = @CheckUpdateFrequencyInHours,
-                BackupFrequencyInDays = @BackupFrequencyInDays,
-                BackupFolderPath = @BackupFolderPath
+                LastCheckUpdateAt = @LastCheckUpdateAt,
+                Others = @Others
             WHERE Id = 1
             ";
         if (tx != null)

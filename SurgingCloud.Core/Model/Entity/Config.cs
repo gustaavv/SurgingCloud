@@ -16,14 +16,14 @@ public record Config
     /// Values <= 0 means do not check updates
     /// </summary>
     public int CheckUpdateFrequencyInHours { get; set; } = 24;
-
+    
     /// <summary>
-    /// 
+    /// The time when last checking update happened
     /// </summary>
-    public int BackupFrequencyInDays { get; set; } = 7;
-
+    public DateTime LastCheckUpdateAt { get; set; }
+    
     /// <summary>
-    /// Backup DB file to another folder
+    /// For future use.
     /// </summary>
-    public string? BackupFolderPath { get; set; }
+    public string Others { get; set; }
 }
