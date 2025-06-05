@@ -1,0 +1,23 @@
+﻿name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate version number
+        run: |
+          CS_VERSION=$(grep -oP '<Version>\K[^<]+(?=</Version>)' ./SurgingCloud.Cli/SurgingCloud.Cli.csproj | head -1)
+          TAG=${GITHUB_REF#refs/*/}
+          
+          if [ "CS_VERSION" != "$TAG" ]; then
+            echo "::error::Tag mismatch! Run tag: $TAG, .csproj version: CS_VERSION"
+            exit 1
+          fi
+          
+          echo "Validation succeeds, version number = $TAG"
