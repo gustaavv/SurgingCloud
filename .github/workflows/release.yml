@@ -15,8 +15,8 @@ jobs:
           CS_VERSION=$(grep -oP '<Version>\K[^<]+(?=</Version>)' ./SurgingCloud.Cli/SurgingCloud.Cli.csproj | head -1)
           TAG=${GITHUB_REF#refs/*/}
           
-          if [ "CS_VERSION" != "$TAG" ]; then
-            echo "::error::Tag mismatch! Run tag: $TAG, .csproj version: CS_VERSION"
+          if [ "$CS_VERSION" != "$TAG" ]; then
+            echo "::error::Tag mismatch! Run tag: $TAG, .csproj version: $CS_VERSION"
             exit 1
           fi
           
