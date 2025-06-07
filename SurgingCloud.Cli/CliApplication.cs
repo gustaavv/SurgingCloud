@@ -120,6 +120,7 @@ public static class CliApplication
                 else if (opt.ListItems)
                 {
                     subjectController.ListAllItems(opt);
+                    return;
                 }
 
                 break;
