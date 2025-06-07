@@ -16,8 +16,7 @@ public class ConfigController
     public void GetConfig()
     {
         var config = _configService.GetConfig();
-        var json = JsonUtils.ToStr(config, pretty: true);
-        Console.WriteLine(json);
+        Console.WriteLine(JsonUtils.ToStr(config, pretty: true));
     }
 
     public void UpdateConfig(ConfigOptions opt)
@@ -28,7 +27,7 @@ public class ConfigController
             config.RarPath = opt.RarPath;
         }
 
-        var (_, msg) = _configService.UpdateConfig(config);
-        Console.WriteLine(msg);
+        var result = _configService.UpdateConfig(config);
+        opt.Cw(result);
     }
 }

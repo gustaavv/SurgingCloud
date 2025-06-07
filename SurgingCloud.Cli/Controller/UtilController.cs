@@ -1,5 +1,6 @@
 ﻿using SurgingCloud.Cli.CommandLineOptions;
 using SurgingCloud.Core.Model.Entity;
+using SurgingCloud.Core.Model.Vo;
 using SurgingCloud.Core.Service;
 
 namespace SurgingCloud.Cli.Controller;
@@ -17,7 +18,7 @@ public class UtilController
     {
         if (string.IsNullOrEmpty(opt.Password))
         {
-            Console.WriteLine("Please enter subject password");
+            opt.Cw(OperationResult<object>.Fail("Please enter subject password"));
             return;
         }
 
@@ -27,8 +28,10 @@ public class UtilController
             HashAlg = opt.HashAlg
         });
 
-        Console.WriteLine($"Subject password: {opt.Password}");
-        Console.WriteLine($"Hash algorithm: {opt.HashAlg}");
-        Console.WriteLine($"Generated archive password: {archivePassword}");
+        opt.Cw(OperationResult<object>.Ok(
+            @$"Subject password: {opt.Password}
+Hash algorithm: {opt.HashAlg}
+Generated archive password: {archivePassword}"
+        ));
     }
 }

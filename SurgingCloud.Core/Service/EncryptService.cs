@@ -1,7 +1,7 @@
-﻿using System.Data;
-using SurgingCloud.Core.Dao;
+﻿using SurgingCloud.Core.Dao;
 using SurgingCloud.Core.Model.Entity;
 using SurgingCloud.Core.Model.Enum;
+using SurgingCloud.Core.Model.Vo;
 using SurgingCloud.Core.Util;
 
 namespace SurgingCloud.Core.Service;
@@ -41,12 +41,12 @@ public class EncryptService
     /// Create an item, generate encrypted file/folder and insert the item into database.
     /// </summary>
     /// <param name="ignoreIfDuplicateInDb">useful for incremental encryption in a same subject</param>
-    public async Task<(bool b, string msg)> EncryptItem(string srcPath, long subjectId, string encOutputPath,
+    public async Task<OperationResult<long>> EncryptItem(string srcPath, long subjectId, string encOutputPath,
         bool ignoreIfDuplicateInDb)
     {
         if (!(File.Exists(srcPath) || Directory.Exists(srcPath)))
         {
-            return (false, $"file/folder does not exist: {srcPath}");
+            return OperationResult<long>.Fail($"file/folder does not exist: {srcPath}");
         }
 
         if (!Directory.Exists(encOutputPath))
@@ -64,9 +64,9 @@ public class EncryptService
                 try
                 {
                     var validationResult = _configService.ValidateConfig(tx: tx);
-                    if (!validationResult.b)
+                    if (!validationResult.Success)
                     {
-                        throw new Exception(validationResult.msg);
+                        throw new Exception(validationResult.Message);
                     }
 
                     var subject = _subjectDao.SelectById(subjectId, tx: tx);
@@ -87,7 +87,7 @@ public class EncryptService
                     if (itemWithSameHashBefore != null && ignoreIfDuplicateInDb)
                     {
                         tx.Commit();
-                        return (true,
+                        return OperationResult<long>.Ok(
                             "Item with same hashBefore already exists in database. No encrypted file generated.");
                     }
 
@@ -137,7 +137,7 @@ public class EncryptService
                     if (itemWithSameHashBefore != null)
                     {
                         tx.Commit();
-                        return (true,
+                        return OperationResult<long>.Ok(
                             $"Encryption succeeds, but item already exists, so no update to database.\n{encDigest}");
                     }
 
@@ -147,13 +147,15 @@ public class EncryptService
                         throw new Exception("Insertion into database failed");
                     }
 
+                    item = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx)!;
+
                     tx.Commit();
-                    return (true, $"Encryption succeeds:\n{encDigest}");
+                    return OperationResult<long>.Ok($"Encryption succeeds:\nItem id = {item.Id}\n{encDigest}", item.Id);
                 }
                 catch (Exception ex)
                 {
                     tx.Rollback();
-                    return (false, "Encryption fails: " + ex.Message);
+                    return OperationResult<long>.Fail($"Encryption fails: {ex.Message}");
                 }
             }
         }

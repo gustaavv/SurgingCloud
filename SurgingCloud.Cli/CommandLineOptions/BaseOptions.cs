@@ -1,9 +1,11 @@
 ﻿using CommandLine;
 using SurgingCloud.Core.Model.Enum;
+using SurgingCloud.Core.Model.Vo;
+using SurgingCloud.Core.Util;
 
 namespace SurgingCloud.Cli.CommandLineOptions;
 
-public abstract class BaseOptions
+public class BaseOptions
 {
     [Option("db", HelpText = "Path to DB file", Required = true)]
     public string DbFilePath { get; set; }
@@ -21,4 +23,16 @@ public abstract class BaseOptions
 
     [Option("out-json", Default = false, HelpText = "Output int JSON format")]
     public bool JsonFormatOutput { get; set; }
+
+    public void Cw<T>(OperationResult<T> result)
+    {
+        if (JsonFormatOutput)
+        {
+            Console.WriteLine(JsonUtils.ToStr(result, pretty: true));
+        }
+        else
+        {
+            Console.WriteLine(result.Message);
+        }
+    }
 }

@@ -2,6 +2,7 @@
 using ConsoleTables;
 using SurgingCloud.Cli.CommandLineOptions;
 using SurgingCloud.Core.Model.Entity;
+using SurgingCloud.Core.Model.Vo;
 using SurgingCloud.Core.Service;
 using SurgingCloud.Core.Util;
 
@@ -53,7 +54,7 @@ public class SubjectController
         }
         else
         {
-            Console.WriteLine("No subject found");
+            opt.Cw(OperationResult<object>.Fail("No subject found"));
         }
     }
 
@@ -63,26 +64,26 @@ public class SubjectController
         opt.Name = opt.Name.Trim();
         if (!(0 < opt.Name.Length && opt.Name.Length < 64))
         {
-            Console.WriteLine("Creation fails. Name must be between 1 and 64 characters");
+            opt.Cw(OperationResult<object>.Fail("Creation fails. Name must be between 1 and 64 characters"));
             return;
         }
 
         opt.Password ??= "";
         if (!(0 < opt.Password.Length && opt.Password.Length < 128))
         {
-            Console.WriteLine("Creation fails. Password must be between 1 and 128 characters");
+            opt.Cw(OperationResult<object>.Fail("Creation fails. Password must be between 1 and 128 characters"));
             return;
         }
 
         var subject = new Subject { Name = opt.Name, Password = opt.Password, HashAlg = opt.HashAlg };
-        var (b, msg) = _subjectService.CreateSubject(subject);
-        Console.WriteLine(b ? "Creation succeeds" : msg);
+        var result = _subjectService.CreateSubject(subject);
+        opt.Cw(result);
     }
 
     public void DeleteSubject(SubjectOptions opt)
     {
-        var (_, msg) = _subjectService.DeleteSubject(opt.SubjectId);
-        Console.WriteLine(msg);
+        var result = _subjectService.DeleteSubject(opt.SubjectId);
+        opt.Cw(result);
     }
 
 
