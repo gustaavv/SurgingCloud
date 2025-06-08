@@ -17,6 +17,7 @@ nav:
       - usage/hello.md
       - usage/config.md
       - usage/subject.md
+      - usage/item.md
       - usage/encrypt.md
       - usage/util.md
       - usage/decrypt.md

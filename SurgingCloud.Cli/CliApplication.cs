@@ -31,6 +31,7 @@ public static class CliApplication
         serviceCollection.AddSingleton<DecryptController>();
         serviceCollection.AddSingleton<EncryptController>();
         serviceCollection.AddSingleton<SubjectController>();
+        serviceCollection.AddSingleton<ItemController>();
         // Even though UtilController currently does not need access to database, I still put it here for convenience
         serviceCollection.AddSingleton<UtilController>();
 
@@ -123,6 +124,14 @@ public static class CliApplication
                     return;
                 }
 
+                break;
+            case ItemOptions opt:
+                var itemController = iocContainer.GetRequiredService<ItemController>();
+                if (opt.GetItem)
+                {
+                    itemController.GetItem(opt);
+                    return;
+                }
                 break;
             case UtilOptions opt:
                 var utilController = iocContainer.GetRequiredService<UtilController>();
