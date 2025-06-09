@@ -33,9 +33,12 @@ public class SubjectService
 
     public OperationResult<long> CreateSubject(Subject subject)
     {
-        if (_subjectDao.SelectByName(subject.Name) != null)
+        var subjectWithSameName = _subjectDao.SelectByName(subject.Name);
+        if (subjectWithSameName != null)
         {
-            return OperationResult<long>.Fail("Creation fails. Subject with the same name already exists");
+            return OperationResult<long>.Fail(
+                $"Creation fails. Subject with the same name already exists, id = {subjectWithSameName.Id}",
+                subjectWithSameName.Id);
         }
 
         if (subject.Password.Length == 0)
