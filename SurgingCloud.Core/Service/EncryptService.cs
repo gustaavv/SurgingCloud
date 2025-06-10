@@ -61,6 +61,8 @@ public class EncryptService
             conn.Open();
             using (var tx = conn.BeginTransaction())
             {
+                string targetPath = null!;
+
                 try
                 {
                     var validationResult = _configService.ValidateConfig(tx: tx);
@@ -88,12 +90,12 @@ public class EncryptService
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            "Item with same hashBefore already exists in database. No encrypted file generated.");
+                            $"Item with same hashBefore (id = {itemWithSameHashBefore.Id}) already exists in database. No encrypted file generated.",
+                            itemWithSameHashBefore.Id);
                     }
 
                     string? hashAfter = null;
                     long? sizeAfter = null;
-                    string targetPath;
                     if (itemType == ItemType.File)
                     {
                         targetPath = Path.Join(encOutputPath, $"{nameAfter}.rar");
@@ -138,7 +140,8 @@ public class EncryptService
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            $"Encryption succeeds, but item already exists, so no update to database.\n{encDigest}");
+                            $"Encryption succeeds, but item (id = {itemWithSameHashBefore.Id}) already exists, so no update to database.\n{encDigest}",
+                            itemWithSameHashBefore.Id);
                     }
 
                     var b = _itemDao.Insert(item, tx: tx) > 0;
@@ -155,6 +158,11 @@ public class EncryptService
                 catch (Exception ex)
                 {
                     tx.Rollback();
+                    if (File.Exists(targetPath))
+                    {
+                        File.Delete(targetPath);
+                    }
+
                     return OperationResult<long>.Fail($"Encryption fails: {ex.Message}");
                 }
             }

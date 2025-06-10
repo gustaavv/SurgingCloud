@@ -22,7 +22,7 @@ public class ItemDao : BaseDao
                 NameBefore TEXT    NOT NULL,
                 NameAfter  TEXT    NOT NULL,
                 ItemType   TEXT    NOT NULL,
-                HashBefore TEXT    NOT NULL UNIQUE,
+                HashBefore TEXT    NOT NULL,
                 HashAfter  TEXT    NULL,
                 SizeBefore INTEGER NULL,
                 SizeAfter  INTEGER NULL,
@@ -30,7 +30,7 @@ public class ItemDao : BaseDao
                 Others     TEXT    NULL
             );
 
-            CREATE INDEX IF NOT EXISTS idx_item_hashbefore ON Item (HashBefore);
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_item_hashbefore ON Item (HashBefore, SubjectId);
 
             CREATE INDEX IF NOT EXISTS idx_item_nameafter ON Item (NameAfter);
         ";
