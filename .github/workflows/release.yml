@@ -50,6 +50,7 @@ jobs:
       - name: Generate Release note
         shell: pwsh
         run: |
+          Add-Content -Path body.md -Value "**Changelog:** [0.0.1...0.1.0](https://github.com/gustaavv/SurgingCloud/compare/0.0.1...0.1.0)`n`n"
           Add-Content -Path body.md -Value "## File checksum`n"
           Add-Content -Path body.md -Value "| checksum | value |"
           Add-Content -Path body.md -Value "| -------- | ----- |"
