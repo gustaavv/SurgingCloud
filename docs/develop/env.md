@@ -8,7 +8,7 @@ This page covers how to set up the development environment for both the SurgingC
 
 I am using JetBrains Rider with default settings to develop. Just import this project and you are ready to code.
 
-## documentation
+## Documentation
 
 This project use Material for MkDocs to build the documentation. Do the following steps to set it up:
 
