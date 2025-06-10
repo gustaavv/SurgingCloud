@@ -1,60 +1,12 @@
-﻿---
-title: Scripts
----
-
-This section contains Python scripts based on SurgingCloud to provide advanced features.
-
-`surging_cloud_exe` is a global variable of the path to `SurgingCloud.Cli.exe`.
-
-```python
+import os
 from os.path import isfile
 
-surging_cloud_exe = r'path\to\exe'
+surging_cloud_exe = r'.\SurgingCloud.Cli\bin\Debug\net6.0\SurgingCloud.Cli.exe'
 
 if not isfile(surging_cloud_exe):
     print('SurgingCloud.Cli.exe not found.')
     exit(1)
-```
 
-
-## Incrementally encrypt a folder
-
-If we constantly add files into a certain folder (`folder_path`), we may want to only generate the encrypted files of the newly-added ones.
-
-```python
-import os
-import subprocess
-from os.path import isdir, join
-
-def incr_enc_folder(folder_path: str, db_path: str, output_path: str, sid: int):
-    if not isdir(folder_path):
-        print(f'No such folder: {folder_path}')
-        return
-
-    for f in os.listdir(folder_path):
-        f = join(folder_path, f)
-        print('Encrypting', f)
-        result = subprocess.run([
-            surging_cloud_exe, 'enc',
-            '--db', db_path,
-            '--sid', str(sid),
-            '--byfile',
-            '--ignore-dup',
-            '--src', f,
-            '--out', output_path,
-        ], capture_output=True, text=True, shell=True)
-        if result.returncode == 0:
-            print(result.stdout)
-        else:
-            print(result.stderr)
-        print('-------------------------------------------------')
-```
-
-## Recursively encrypt a folder
-
-It is recommended to create a subject for each folder like this script does. The names of the subjects created represent the relative paths of those corresponding subfolders to the top-level folder.
-
-```python
 from os.path import isdir, isfile, join
 import subprocess
 import json
@@ -131,4 +83,8 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: 
                 return
             item = get_item(iid, db_path)
             recursive_enc_folder(f_abspath, db_path, join(output_path, item['NameAfter']), new_sid)
-```
+
+
+if __name__ == '__main__':
+    # recursive_enc_folder(r'.\test\src', r'test1.db', r'.\test\out', 2)
+    pass
