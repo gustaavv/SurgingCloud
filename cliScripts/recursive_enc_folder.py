@@ -1,4 +1,3 @@
-import os
 from os.path import isfile
 
 surging_cloud_exe = r'.\SurgingCloud.Cli\bin\Debug\net6.0\SurgingCloud.Cli.exe'
@@ -6,7 +5,8 @@ surging_cloud_exe = r'.\SurgingCloud.Cli\bin\Debug\net6.0\SurgingCloud.Cli.exe'
 if not isfile(surging_cloud_exe):
     print('SurgingCloud.Cli.exe not found.')
     exit(1)
-
+# --8<-- [start:doc]
+import os
 from os.path import isdir, isfile, join
 import subprocess
 import json
@@ -83,7 +83,7 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: 
                 return
             item = get_item(iid, db_path)
             recursive_enc_folder(f_abspath, db_path, join(output_path, item['NameAfter']), new_sid)
-
+# --8<-- [end:doc]
 
 if __name__ == '__main__':
     # recursive_enc_folder(r'.\test\src', r'test1.db', r'.\test\out', 2)

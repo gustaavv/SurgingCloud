@@ -5,7 +5,7 @@ surging_cloud_exe = r'.\SurgingCloud.Cli\bin\Debug\net6.0\SurgingCloud.Cli.exe'
 if not isfile(surging_cloud_exe):
     print('SurgingCloud.Cli.exe not found.')
     exit(1)
-
+# --8<-- [start:doc]
 import os
 import subprocess
 from os.path import isdir, join
@@ -33,7 +33,7 @@ def incr_enc_folder(folder_path: str, db_path: str, output_path: str, sid: int):
         else:
             print(result.stderr)
         print('-------------------------------------------------')
-
+# --8<-- [end:doc]
 
 if __name__ == '__main__':
     # incr_enc_folder(r'.\test\src\', r'test1.db', r'.\test\out\', 3)
