@@ -21,6 +21,7 @@ nav:
       - usage/encrypt.md
       - usage/util.md
       - usage/decrypt.md
+      - usage/common.md
       - usage/scripts.md
   - Developer Guide:
       - develop/index.md

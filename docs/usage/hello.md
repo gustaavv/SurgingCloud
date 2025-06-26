@@ -6,47 +6,66 @@ This tutorial will walk you through the basic steps to use SurgingCloud.
 
 ## Step 1. Initialization
 
-The command below does two things:
-
-- Create a database file. Put it in a safe location as all the encryption information is stored in it. You can do backups on a regular basis.
-- Config SurgingCloud to let it know the path to `rar.exe` installed on your computer.
+After installation, the first thing to do is to initialize. Execute the following command:
 
 ```powershell
-.\SurgingCloud.Cli.exe config --db "path/to/db" --update --rar "path/to/rar.exe"
+.\SurgingCloud.Cli.exe config --db "data.db" --update --rar "D:\WinRAR\Rar.exe"
 ```
+
+The output will be like:
+
+```
+Create a new database file at data.db
+Update succeeds
+```
+
+The command does two things:
+
+- Create a database file at `data.db`. You should put the database in a safe location because it stores all the encryption information. You should also do regular backups.
+- Config SurgingCloud to let it know the path to `rar.exe` installed on your computer.
+
+
 
 ## Step 2. Create a subject
 
-A subject is like a folder, containing all the encryption information of files stored in it. Given a file on your filesystem, SurgingCloud encrypts it as well as generate an item into the subject. Both the subjects and items are stored in the database specified by the `--db "path/to/db"` argument.
+A subject is like a folder, containing all the encryption information of files stored in it. Let's create one subject called `Photos` with password `123`:
 
 ```powershell
-.\SurgingCloud.Cli.exe subject --db "path/to/db" --new --name "subject name" --pwd "subject password" --hashAlg 0
+.\SurgingCloud.Cli.exe subject --db "data.db" --new --name "Photos" --pwd "123"
 ```
 
-- `--name "subject name"`: set the subject name. Common names are like `photos`, `videos`. But detailed names are recommended and you should probably use folder structure names for better management as the items increase. For example, `/photos/travel/2020` and `/videos/drama/1980`.
-- `--pwd "subject password"`: set the subject password. This password is what you should remember. The actual password for each encrypted file is made by a hash algorithm (see `--hashAlg`) given the input of this password. So no encrypted file can be cracked by brute force.
-- `--hashAlg 0`: the hash algorithm for generating the actual password for each encrypted file. `0` (default) means SHA256, `1` means SHA1 and `2` means MD5. You can just omit this argument because SHA256 is the best among them.
-
-Let's have a look at the subject we just created.
-
-```powershell
-.\SurgingCloud.Cli.exe subject --db "path/to/db" --list
+The output will be like:
+```
+Using existing database file at data.db
+Creation succeeds, new subject id = 1
 ```
 
-Remember the id of the subject. We will need it in the next step.
+Each subject is uniquely identified by its id. Take note of this id. We will need it in the following steps.
 
 
 ## Step 3. Encrypt a file
 
+SurgingCloud encrypts a file by storing its relevant information into a user-specified subject and generating the encrypted file.
+
+Let's encrypt a file `D:\Pictures\selfie.png` using the subject with id `1`, i.e. the one we just created, and make the encrypted file generated in folder `E:\backup\Pictures`: 
+
 ```powershell
-.\SurgingCloud.Cli.exe enc --db "path/to/db" --sid 0 --byfile --src "src/file" --out "out/path"
+.\SurgingCloud.Cli.exe enc --db "data.db" --sid 1 --byfile --src "D:\Pictures\selfie.png" --out "E:\backup\Pictures"
 ```
 
-- `--sid 0`: specify which subject to store the encryption information of this file.
-- `--byfile`: encrypt a single file (later SurgingCloud will have the ability to encrypt a folder and all the children in it).
-- `--src "src/file"`: the path to the file you want to encrypt.
-- `--out "out/path"`: the folder to generate the encrypted file.
+The output will be like:
+```
+Using existing database file at data.db
+Encryption succeeds:
+Item id = 1
+src: D:\Pictures\selfie.png
+out: E:\backup\Pictures\6367a30064043fb1f227.rar
+```
+
+Each item is uniquely identified by its id.
+
+The encrypted file is at `E:\backup\Pictures\6367a30064043fb1f227.rar`. 
 
 ## Step 4. Upload the encrypted file
 
-Well done! You have successfully encrypted a file. Now, feel free to upload the encrypted file to cloud drives.
+Well done! You have successfully encrypted a file. Now feel free to upload the encrypted file to (various) cloud drives.
