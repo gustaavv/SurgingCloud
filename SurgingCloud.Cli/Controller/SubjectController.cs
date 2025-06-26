@@ -36,6 +36,8 @@ public class SubjectController
             EnableCount = true
         });
 
+        consoleTable.MaxWidth = int.MaxValue;
+        
         subjects.ForEach(s => { consoleTable.AddRow(s.Id, s.Name, s.Password, s.HashAlg); });
 
         consoleTable.Write();
@@ -102,6 +104,8 @@ public class SubjectController
             Columns = new[] { "id", "name before", "name after", "item type", "hash before", "hash after" },
             EnableCount = true
         });
+        
+        consoleTable.MaxWidth = int.MaxValue;
 
         items.ForEach(e =>
         {

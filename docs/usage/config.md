@@ -7,11 +7,11 @@ The configuration of SurgingCloud is also stored in the database file. That's wh
 ## Get current config
 
 ```powershell
-.\SurgingCloud.Cli.exe config --db "path/to/db" --get
+.\SurgingCloud.Cli.exe config --get --db "path/to/db"
 ```
 
 ## Update config
 
 ```powershell
-.\SurgingCloud.Cli.exe config --db "path/to/db" --update --rar "path/to/rar.exe"
+.\SurgingCloud.Cli.exe config --update --rar "path/to/rar.exe" --db "path/to/db"
 ```

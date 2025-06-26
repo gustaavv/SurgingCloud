@@ -5,5 +5,5 @@ title: Item Operation
 ## Get Item detail
 
 ```powershell
-.\SurgingCloud.Cli.exe item --db "path/to/db" --get --iid 0
+.\SurgingCloud.Cli.exe item --get --iid 0 --db "path/to/db"
 ```

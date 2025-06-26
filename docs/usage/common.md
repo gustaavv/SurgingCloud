@@ -36,10 +36,10 @@ out: E:\backup\Pictures\6367a30064043fb1f227.rar
 
 `--out-json` enabled:
 
-```
+```json
 {
   "Success": true,
-  "Message": "Encryption succeeds:\nItem id = 1\nsrc: D:\Pictures\selfie.png\nout: E:\backup\Pictures\6367a30064043fb1f227.rar",
+  "Message": "Encryption succeeds:\nItem id = 1\nsrc: D:\\Pictures\\selfie.png\nout: E:\\backup\\Pictures\\6367a30064043fb1f227.rar",
   "Data": 1
 }
 ```
