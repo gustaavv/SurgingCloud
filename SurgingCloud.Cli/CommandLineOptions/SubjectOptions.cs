@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using SurgingCloud.Core.Model.Enum;
 
 namespace SurgingCloud.Cli.CommandLineOptions;
 
@@ -22,4 +23,7 @@ public class SubjectOptions : BaseOptions
 
     [Option("name", HelpText = "Subject name")]
     public string? Name { get; set; }
+
+    [Option("enc-method", Default = EncMethod.Rar, HelpText = "Encryption method enum value. 0: RAR")]
+    public EncMethod EncMethod { get; set; }
 }
