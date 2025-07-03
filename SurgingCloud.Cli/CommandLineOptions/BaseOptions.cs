@@ -23,6 +23,9 @@ public class BaseOptions
 
     [Option("out-json", Default = false, HelpText = "Output int JSON format")]
     public bool JsonFormatOutput { get; set; }
+    
+    [Option("bkp-db", Default = false, HelpText = "Backup database before operation")]
+    public bool BackupDb { get; set; }
 
     public void Cw<T>(OperationResult<T> result)
     {
