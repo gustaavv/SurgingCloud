@@ -13,7 +13,7 @@ public class EncryptController
         _encryptService = encryptService;
     }
 
-    public async Task EncryptFile(EncryptOptions opt)
+    public async Task Encrypt(EncryptOptions opt)
     {
         if (opt.SourcePath == null)
         {
@@ -34,7 +34,8 @@ public class EncryptController
         }
 
         var result =
-            await _encryptService.EncryptItem(opt.SourcePath, opt.SubjectId, opt.OutPath, opt.IgnoreIfDuplicateInDb);
+            await _encryptService.EncryptItem(opt.SourcePath, opt.SubjectId, opt.OutPath,
+                opt.IgnoreIfDuplicateInDb, opt.EncWholeFolder);
         opt.Cw(result);
     }
 }

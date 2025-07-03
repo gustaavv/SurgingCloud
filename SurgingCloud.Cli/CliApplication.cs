@@ -110,13 +110,8 @@ public static class CliApplication
                 break;
             case EncryptOptions opt:
                 var encryptController = iocContainer.GetRequiredService<EncryptController>();
-                if (opt.ByFile)
-                {
-                    await encryptController.EncryptFile(opt);
-                    return;
-                }
-
-                break;
+                await encryptController.Encrypt(opt);
+                return;
             case SubjectOptions opt:
                 var subjectController = iocContainer.GetRequiredService<SubjectController>();
                 if (opt.CreateSubject)

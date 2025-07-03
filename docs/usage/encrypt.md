@@ -12,12 +12,11 @@ The encryption functionality of SurgingCloud is currently based on `rar.exe` (Yo
 ## Encrypt a file
 
 ```powershell
-.\SurgingCloud.Cli.exe enc --sid 0 --byfile --src "src/file" --out "out/path" --db "path/to/db"
+.\SurgingCloud.Cli.exe enc --sid 0 --src "src/file" --out "out/path" --db "path/to/db"
 ```
 
 Arguments:
 
 - `--sid 0`: specify which subject to store the encryption information of this file.
-- `--byfile`: encrypt a single file (later SurgingCloud will have the ability to encrypt a folder and all the children in it).
 - `--src "src/file"`: the path to the file you want to encrypt.
 - `--out "out/path"`: the folder to generate the encrypted file.

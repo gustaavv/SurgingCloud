@@ -37,9 +37,9 @@ public static class ArchiveUtils
         foreach (var f in sources)
         {
             var file = f.Trim();
-            if (!File.Exists(file))
+            if (!(File.Exists(file) || Directory.Exists(file)))
             {
-                throw new FileNotFoundException($"File does not exist: {file}");
+                throw new FileNotFoundException($"File/Folder does not exist: {file}");
             }
 
             filesStr += $" \"{file}\" ";
@@ -186,7 +186,7 @@ public static class ArchiveUtils
         var argument = $" lb -p{pwd} \"{archive}\"";
         using var process = ProcessUtils.CreateProcess(RarPath, argument);
         var (exitCode, output, _, _) = await ProcessUtils.RunProcess(process);
-        
+
         return exitCode == 0 ? output.Split("\n").ToList() : new List<string>();
     }
 

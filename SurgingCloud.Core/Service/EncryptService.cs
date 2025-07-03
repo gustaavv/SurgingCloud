@@ -41,8 +41,9 @@ public class EncryptService
     /// Create an item, generate encrypted file/folder and insert the item into database.
     /// </summary>
     /// <param name="ignoreIfDuplicateInDb">useful for incremental encryption in a same subject</param>
+    /// <param name="encWholeFolder"></param>
     public async Task<OperationResult<long>> EncryptItem(string srcPath, long subjectId, string encOutputPath,
-        bool ignoreIfDuplicateInDb)
+        bool ignoreIfDuplicateInDb, bool encWholeFolder)
     {
         if (!(File.Exists(srcPath) || Directory.Exists(srcPath)))
         {
@@ -96,7 +97,7 @@ public class EncryptService
 
                     string? hashAfter = null;
                     long? sizeAfter = null;
-                    if (itemType == ItemType.File)
+                    if (itemType == ItemType.File || encWholeFolder)
                     {
                         targetPath = Path.Join(encOutputPath, $"{nameAfter}.rar");
                         var result = await ArchiveUtils.CompressRar(
