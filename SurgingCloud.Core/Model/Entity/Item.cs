@@ -36,7 +36,7 @@ public record Item
     public string HashBefore { get; set; }
 
     /// <summary>
-    /// File hash result after encryption. Null for folder.
+    /// File hash result after encryption. Null for folder encrypted to a folder instead of a file.
     /// </summary>
     public string? HashAfter { get; set; }
 
@@ -46,7 +46,7 @@ public record Item
     public long? SizeBefore { get; set; }
 
     /// <summary>
-    /// File size after encryption. Null for folder.
+    /// File size after encryption. Null for folder encrypted to a folder instead of a file.
     /// </summary>
     public long? SizeAfter { get; set; }
 
