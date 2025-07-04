@@ -35,10 +35,11 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build and publish
-        shell: pwsh
-        run: |
-          dotnet publish ./SurgingCloud.Cli/SurgingCloud.Cli.csproj -c Release -o ./publish/SurgingCloud
+      - name: Restore
+        run: dotnet restore ./SurgingCloud.Cli/SurgingCloud.Cli.csproj
+    
+      - name: Publish
+        run: dotnet publish ./SurgingCloud.Cli/SurgingCloud.Cli.csproj -c Release -o ./publish/SurgingCloud --no-restore
 
       - name: Make artifacts
         shell: pwsh
