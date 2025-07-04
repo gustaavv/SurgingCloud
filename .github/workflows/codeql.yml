@@ -1,0 +1,31 @@
+﻿name: "CodeQL"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 6'
+
+jobs:
+  analyze:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+
+      - name: Setup DotNet Environment
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build and publish
+        shell: pwsh
+        run: dotnet build ./SurgingCloud.Cli/SurgingCloud.Cli.csproj -c Release
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
