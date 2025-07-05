@@ -65,7 +65,7 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str,
         if isfile(f_abspath):
             result = subprocess.run([
                 surging_cloud_exe, 'enc', '--db', db_path, '--out-json',
-                '--sid', str(sid), '--byfile', '--src', f_abspath,
+                '--sid', str(sid), '--src', f_abspath,
                 '--out', output_path, '--ignore-dup',
             ], capture_output=True, text=True, shell=True)
             # TODO: print something with the result if you wish
@@ -76,7 +76,7 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str,
                 return
             result = subprocess.run([
                 surging_cloud_exe, 'enc', '--db', db_path, '--out-json',
-                '--sid', str(sid), '--byfile', '--src', f_abspath,
+                '--sid', str(sid), '--src', f_abspath,
                 '--out', output_path,
             ], capture_output=True, text=True, shell=True)
             result = json.loads(result.stdout)

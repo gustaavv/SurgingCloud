@@ -46,7 +46,19 @@ public class SubjectController
     public async Task GetSubject(SubjectOptions opt)
     {
         var id = opt.SubjectId;
-        var subject = _subjectService.GetSubjectById(id);
+        var name = opt.Name;
+        Subject? subject = null;
+
+        // precedence: id, name
+        if (id >= 0)
+        {
+            subject = _subjectService.GetSubjectById(id);
+        }
+        else if (!string.IsNullOrWhiteSpace(name))
+        {
+            subject = _subjectService.GetSubjectByName(name);
+        }
+
         if (subject != null)
         {
             dynamic newObj = JsonUtils.ToObj<ExpandoObject>(JsonUtils.ToStr(subject))!;
