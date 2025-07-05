@@ -62,8 +62,8 @@ public class EncryptService
             conn.Open();
             using (var tx = conn.BeginTransaction())
             {
-                string targetPath = null!;
-
+                string? targetPath = null;
+                var archiveMade = false;
                 try
                 {
                     var validationResult = _configService.ValidateConfig(tx: tx);
@@ -109,6 +109,7 @@ public class EncryptService
                         {
                             throw new Exception($"Compressing rar archive fails with exit code {result}");
                         }
+                        archiveMade = true;
 
                         hashAfter = await HashUtils.ComputeFileHash(targetPath, subject.HashAlg);
                         sizeAfter = new FileInfo(targetPath).Length;
@@ -159,7 +160,7 @@ public class EncryptService
                 catch (Exception ex)
                 {
                     tx.Rollback();
-                    if (File.Exists(targetPath))
+                    if (archiveMade && File.Exists(targetPath))
                     {
                         File.Delete(targetPath);
                     }
