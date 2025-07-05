@@ -109,6 +109,7 @@ public class EncryptService
                         {
                             throw new Exception($"Compressing rar archive fails with exit code {result}");
                         }
+
                         archiveMade = true;
 
                         hashAfter = await HashUtils.ComputeFileHash(targetPath, subject.HashAlg);
@@ -153,6 +154,13 @@ public class EncryptService
                     }
 
                     item = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx)!;
+
+                    // set subject.UpdateAt to current timestamp 
+                    b = _subjectDao.Update(_subjectDao.SelectById(subjectId, tx: tx)!, tx: tx) > 0;
+                    if (!b)
+                    {
+                        throw new Exception("Update subject failed");
+                    }
 
                     tx.Commit();
                     return OperationResult<long>.Ok($"Encryption succeeds:\nItem id = {item.Id}\n{encDigest}", item.Id);
