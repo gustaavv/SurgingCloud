@@ -15,3 +15,9 @@ The configuration of SurgingCloud is also stored in the database file. That's wh
 ```powershell
 .\SurgingCloud.Cli.exe config --update --rar "path/to/rar.exe" --db "path/to/db"
 ```
+
+## Validate config
+
+```powershell
+.\SurgingCloud.Cli.exe config --validate --db "path/to/db"
+```
