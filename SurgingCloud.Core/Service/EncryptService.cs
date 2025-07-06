@@ -37,6 +37,14 @@ public class EncryptService
         return pwd.Substring(0, Math.Min(pwd.Length, ARCHIVE_PASSWORD_LENGTH));
     }
 
+    private int GetCompressThreadCount(int percent = 70)
+    {
+        var c = Environment.ProcessorCount;
+        var ans = Math.Min(c * percent / 100, c - 2);
+        ans = Math.Max(ans, 1);
+        return ans;
+    }
+
     /// <summary>
     /// Create an item, generate encrypted file/folder and insert the item into database.
     /// </summary>
@@ -103,7 +111,8 @@ public class EncryptService
                         var result = await ArchiveUtils.CompressRar(
                             new List<string> { srcPath },
                             targetPath,
-                            await CreateArchivePassword(subject)
+                            await CreateArchivePassword(subject),
+                            threads: GetCompressThreadCount()
                         );
                         if (result != 0)
                         {
