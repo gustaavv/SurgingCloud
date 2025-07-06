@@ -97,6 +97,11 @@ public static class CliApplication
                     configController.GetConfig();
                     return;
                 }
+                else if (opt.ValidateConfig)
+                {
+                    configController.ValidateConfig(opt);
+                    return;
+                }
 
                 break;
             case DecryptOptions opt:
