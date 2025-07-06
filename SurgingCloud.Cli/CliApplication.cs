@@ -161,6 +161,10 @@ public static class CliApplication
                 {
                     await utilController.GeneratePassword(opt);
                     return;
+                } else if (opt.HashFilename)
+                {
+                    await utilController.HashFilename(opt);
+                    return;
                 }
 
                 break;
