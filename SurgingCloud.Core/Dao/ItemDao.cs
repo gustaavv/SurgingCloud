@@ -30,7 +30,7 @@ public class ItemDao : BaseDao
                 Others     TEXT    NULL
             );
 
-            CREATE UNIQUE INDEX IF NOT EXISTS idx_item_hashbefore ON Item (HashBefore, SubjectId);
+            CREATE INDEX IF NOT EXISTS idx_item_namebefore_hashbefore ON Item (NameBefore, HashBefore, SubjectId);
 
             CREATE INDEX IF NOT EXISTS idx_item_nameafter ON Item (NameAfter);
         ";
@@ -71,6 +71,22 @@ public class ItemDao : BaseDao
 
         using var conn = CreateConnection();
         return conn.QueryFirstOrDefault<Item>(sql, new { SubjectId = subjectId, HashBefore = hashBefore });
+    }
+
+    public Item? SelectByNameBeforeAndHashBefore(long subjectId, string nameBefore, string hashBefore,
+        IDbTransaction? tx = null)
+    {
+        const string sql =
+            "SELECT * FROM Item WHERE SubjectId = @SubjectId AND NameBefore = @NameBefore AND HashBefore = @HashBefore";
+        if (tx != null)
+        {
+            return tx.QueryFirstOrDefault<Item>(sql,
+                new { SubjectId = subjectId, NameBefore = nameBefore, HashBefore = hashBefore });
+        }
+
+        using var conn = CreateConnection();
+        return conn.QueryFirstOrDefault<Item>(sql,
+            new { SubjectId = subjectId, NameBefore = nameBefore, HashBefore = hashBefore });
     }
 
     public Item? SelectByNameAfter(long subjectId, string nameAfter, IDbTransaction? tx = null)

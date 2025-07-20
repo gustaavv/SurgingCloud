@@ -93,14 +93,15 @@ public class EncryptService
                         : nameBefore;
                     var nameAfter = await _hashService.HashFilename(nameBefore, subject.HashAlg);
 
-                    var itemWithSameHashBefore = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx);
+                    var itemWithSameNameAndHash =
+                        _itemDao.SelectByNameBeforeAndHashBefore(subject.Id, nameBefore, hashBefore, tx: tx);
 
-                    if (itemWithSameHashBefore != null && ignoreIfDuplicateInDb)
+                    if (itemWithSameNameAndHash != null && ignoreIfDuplicateInDb)
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            $"Item with same hashBefore (id = {itemWithSameHashBefore.Id}) already exists in database. No encrypted file generated.",
-                            itemWithSameHashBefore.Id);
+                            $"Item with same name and hashBefore (id = {itemWithSameNameAndHash.Id}) already existed in database. No encrypted file generated.",
+                            itemWithSameNameAndHash.Id);
                     }
 
                     string? hashAfter = null;
@@ -148,12 +149,12 @@ public class EncryptService
 
                     var encDigest = $"src: {Path.GetFullPath(srcPath)}\nout: {Path.GetFullPath(targetPath)}";
 
-                    if (itemWithSameHashBefore != null)
+                    if (itemWithSameNameAndHash != null)
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            $"Encryption succeeds, but item (id = {itemWithSameHashBefore.Id}) already exists, so no update to database.\n{encDigest}",
-                            itemWithSameHashBefore.Id);
+                            $"Encryption succeeds, but item (id = {itemWithSameNameAndHash.Id}) already exists, so no update to database.\n{encDigest}",
+                            itemWithSameNameAndHash.Id);
                     }
 
                     var b = _itemDao.Insert(item, tx: tx) > 0;
@@ -162,7 +163,7 @@ public class EncryptService
                         throw new Exception("Insertion into database failed");
                     }
 
-                    item = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx)!;
+                    item = _itemDao.SelectByNameBeforeAndHashBefore(subject.Id, nameBefore, hashBefore, tx: tx)!;
 
                     // set subject.UpdateAt to current timestamp 
                     b = _subjectDao.Update(_subjectDao.SelectById(subjectId, tx: tx)!, tx: tx) > 0;
