@@ -76,9 +76,9 @@ public class SubjectController
     {
         opt.Name ??= "";
         opt.Name = opt.Name.Trim();
-        if (!(0 < opt.Name.Length && opt.Name.Length < 64))
+        if (!(opt.Name.Length > 0))
         {
-            opt.Cw(OperationResult<object>.Fail("Creation fails. Name must be between 1 and 64 characters"));
+            opt.Cw(OperationResult<object>.Fail("Creation fails. Name must contain at least 1 character"));
             return;
         }
 
