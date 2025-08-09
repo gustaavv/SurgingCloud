@@ -42,3 +42,9 @@ Currently, only `RarPath` field is in use. You can ignore other fields.
 ```
 Update succeeds
 ```
+
+## Validate config
+
+```powershell
+.\SurgingCloud.Cli.exe config --validate --db "path/to/db"
+```

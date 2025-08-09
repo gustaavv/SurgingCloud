@@ -20,10 +20,10 @@ public class ConfigService
 
         if (!File.Exists(config.RarPath))
         {
-            return OperationResult<object>.Fail($"Rar path is invalid: {config.RarPath}");
+            return OperationResult<object>.Fail($"Rar path is invalid: {config.RarPath}", config);
         }
 
-        return OperationResult<object>.Ok("Config validation succeeds");
+        return OperationResult<object>.Ok("Config validation succeeds", config);
     }
 
     public Config GetConfig()

@@ -37,12 +37,21 @@ public class EncryptService
         return pwd.Substring(0, Math.Min(pwd.Length, ARCHIVE_PASSWORD_LENGTH));
     }
 
+    private int GetCompressThreadCount(int percent = 70)
+    {
+        var c = Environment.ProcessorCount;
+        var ans = Math.Min(c * percent / 100, c - 2);
+        ans = Math.Max(ans, 1);
+        return ans;
+    }
+
     /// <summary>
     /// Create an item, generate encrypted file/folder and insert the item into database.
     /// </summary>
     /// <param name="ignoreIfDuplicateInDb">useful for incremental encryption in a same subject</param>
+    /// <param name="encWholeFolder"></param>
     public async Task<OperationResult<long>> EncryptItem(string srcPath, long subjectId, string encOutputPath,
-        bool ignoreIfDuplicateInDb)
+        bool ignoreIfDuplicateInDb, bool encWholeFolder)
     {
         if (!(File.Exists(srcPath) || Directory.Exists(srcPath)))
         {
@@ -61,8 +70,8 @@ public class EncryptService
             conn.Open();
             using (var tx = conn.BeginTransaction())
             {
-                string targetPath = null!;
-
+                string? targetPath = null;
+                var archiveMade = false;
                 try
                 {
                     var validationResult = _configService.ValidateConfig(tx: tx);
@@ -84,30 +93,34 @@ public class EncryptService
                         : nameBefore;
                     var nameAfter = await _hashService.HashFilename(nameBefore, subject.HashAlg);
 
-                    var itemWithSameHashBefore = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx);
+                    var itemWithSameNameAndHash =
+                        _itemDao.SelectByNameBeforeAndHashBefore(subject.Id, nameBefore, hashBefore, tx: tx);
 
-                    if (itemWithSameHashBefore != null && ignoreIfDuplicateInDb)
+                    if (itemWithSameNameAndHash != null && ignoreIfDuplicateInDb)
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            $"Item with same hashBefore (id = {itemWithSameHashBefore.Id}) already exists in database. No encrypted file generated.",
-                            itemWithSameHashBefore.Id);
+                            $"Item with same name and hashBefore (id = {itemWithSameNameAndHash.Id}) already existed in database. No encrypted file generated.",
+                            itemWithSameNameAndHash.Id);
                     }
 
                     string? hashAfter = null;
                     long? sizeAfter = null;
-                    if (itemType == ItemType.File)
+                    if (itemType == ItemType.File || encWholeFolder)
                     {
                         targetPath = Path.Join(encOutputPath, $"{nameAfter}.rar");
                         var result = await ArchiveUtils.CompressRar(
                             new List<string> { srcPath },
                             targetPath,
-                            await CreateArchivePassword(subject)
+                            await CreateArchivePassword(subject),
+                            threads: GetCompressThreadCount()
                         );
                         if (result != 0)
                         {
                             throw new Exception($"Compressing rar archive fails with exit code {result}");
                         }
+
+                        archiveMade = true;
 
                         hashAfter = await HashUtils.ComputeFileHash(targetPath, subject.HashAlg);
                         sizeAfter = new FileInfo(targetPath).Length;
@@ -136,12 +149,12 @@ public class EncryptService
 
                     var encDigest = $"src: {Path.GetFullPath(srcPath)}\nout: {Path.GetFullPath(targetPath)}";
 
-                    if (itemWithSameHashBefore != null)
+                    if (itemWithSameNameAndHash != null)
                     {
                         tx.Commit();
                         return OperationResult<long>.Ok(
-                            $"Encryption succeeds, but item (id = {itemWithSameHashBefore.Id}) already exists, so no update to database.\n{encDigest}",
-                            itemWithSameHashBefore.Id);
+                            $"Encryption succeeds, but item (id = {itemWithSameNameAndHash.Id}) already exists, so no update to database.\n{encDigest}",
+                            itemWithSameNameAndHash.Id);
                     }
 
                     var b = _itemDao.Insert(item, tx: tx) > 0;
@@ -150,7 +163,14 @@ public class EncryptService
                         throw new Exception("Insertion into database failed");
                     }
 
-                    item = _itemDao.SelectByHashBefore(subject.Id, hashBefore, tx: tx)!;
+                    item = _itemDao.SelectByNameBeforeAndHashBefore(subject.Id, nameBefore, hashBefore, tx: tx)!;
+
+                    // set subject.UpdateAt to current timestamp 
+                    b = _subjectDao.Update(_subjectDao.SelectById(subjectId, tx: tx)!, tx: tx) > 0;
+                    if (!b)
+                    {
+                        throw new Exception("Update subject failed");
+                    }
 
                     tx.Commit();
                     return OperationResult<long>.Ok($"Encryption succeeds:\nItem id = {item.Id}\n{encDigest}", item.Id);
@@ -158,7 +178,7 @@ public class EncryptService
                 catch (Exception ex)
                 {
                     tx.Rollback();
-                    if (File.Exists(targetPath))
+                    if (archiveMade && File.Exists(targetPath))
                     {
                         File.Delete(targetPath);
                     }

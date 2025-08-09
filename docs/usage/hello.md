@@ -50,7 +50,7 @@ SurgingCloud encrypts a file by storing its relevant information into a user-spe
 Let's encrypt a file `D:\Pictures\selfie.png` using the subject with id `1`, i.e. the one we just created, and make the encrypted file generated in folder `E:\backup\Pictures`: 
 
 ```powershell
-.\SurgingCloud.Cli.exe enc --db "data.db" --sid 1 --byfile --src "D:\Pictures\selfie.png" --out "E:\backup\Pictures"
+.\SurgingCloud.Cli.exe enc --db "data.db" --sid 1 --src "D:\Pictures\selfie.png" --out "E:\backup\Pictures"
 ```
 
 The output will be like:

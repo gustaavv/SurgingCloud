@@ -31,6 +31,11 @@ public class SubjectService
         return _subjectDao.SelectById(id);
     }
 
+    public Subject? GetSubjectByName(string name)
+    {
+        return _subjectDao.SelectByName(name);
+    }
+    
     public OperationResult<long> CreateSubject(Subject subject)
     {
         var subjectWithSameName = _subjectDao.SelectByName(subject.Name);

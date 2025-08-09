@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SurgingCloud.Cli.CommandLineOptions;
 using SurgingCloud.Cli.Controller;
 using SurgingCloud.Core;
+using SurgingCloud.Core.Util;
 
 namespace SurgingCloud.Cli;
 
@@ -38,6 +39,20 @@ public static class CliApplication
         return serviceCollection.BuildServiceProvider();
     }
 
+    private static void BackupDb(BaseOptions baseOptions)
+    {
+        var dir = Directory.GetParent(baseOptions.DbFilePath)!.FullName;
+        var dbFilename = FsUtils.GetLastEntry(baseOptions.DbFilePath);
+        var now = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+        var bkpFilename = dbFilename + $".{now}.bkp";
+        var bkpFilepath = Path.Combine(dir, bkpFilename);
+        File.Copy(baseOptions.DbFilePath, bkpFilepath);
+        if (!baseOptions.JsonFormatOutput)
+        {
+            Console.WriteLine($"Backup database file at {bkpFilepath}");
+        }
+    }
+
     private static async Task Run(object obj)
     {
         var baseOptions = (BaseOptions)obj;
@@ -47,9 +62,10 @@ public static class CliApplication
             return;
         }
 
+        var dbExists = File.Exists(baseOptions.DbFilePath);
         if (!baseOptions.JsonFormatOutput)
         {
-            if (!File.Exists(baseOptions.DbFilePath))
+            if (!dbExists)
             {
                 Console.WriteLine($"Create a new database file at {baseOptions.DbFilePath}");
             }
@@ -57,6 +73,11 @@ public static class CliApplication
             {
                 Console.WriteLine($"Using existing database file at {baseOptions.DbFilePath}");
             }
+        }
+
+        if (dbExists && baseOptions.BackupDb)
+        {
+            BackupDb(baseOptions);
         }
 
         var iocContainer = BuildIocContainer(baseOptions.DbFilePath);
@@ -76,6 +97,11 @@ public static class CliApplication
                     configController.GetConfig();
                     return;
                 }
+                else if (opt.ValidateConfig)
+                {
+                    configController.ValidateConfig(opt);
+                    return;
+                }
 
                 break;
             case DecryptOptions opt:
@@ -89,13 +115,8 @@ public static class CliApplication
                 break;
             case EncryptOptions opt:
                 var encryptController = iocContainer.GetRequiredService<EncryptController>();
-                if (opt.ByFile)
-                {
-                    await encryptController.EncryptFile(opt);
-                    return;
-                }
-
-                break;
+                await encryptController.Encrypt(opt);
+                return;
             case SubjectOptions opt:
                 var subjectController = iocContainer.GetRequiredService<SubjectController>();
                 if (opt.CreateSubject)
@@ -132,12 +153,17 @@ public static class CliApplication
                     itemController.GetItem(opt);
                     return;
                 }
+
                 break;
             case UtilOptions opt:
                 var utilController = iocContainer.GetRequiredService<UtilController>();
                 if (opt.GeneratePassword)
                 {
                     await utilController.GeneratePassword(opt);
+                    return;
+                } else if (opt.HashFilename)
+                {
+                    await utilController.HashFilename(opt);
                     return;
                 }
 

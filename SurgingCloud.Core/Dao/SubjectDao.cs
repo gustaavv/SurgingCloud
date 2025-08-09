@@ -17,13 +17,14 @@ public class SubjectDao : BaseDao
         const string createTableSql = @"
             CREATE TABLE IF NOT EXISTS Subject
             (
-                Id       INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                Name     TEXT    NOT NULL UNIQUE,
-                Password TEXT    NOT NULL,
-                HashAlg  TEXT    NOT NULL,
-                CreateAt TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                UpdateAt TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                Others   TEXT    NULL
+                Id        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                Name      TEXT    NOT NULL UNIQUE,
+                Password  TEXT    NOT NULL,
+                EncMethod TEXT    NOT NULL,
+                HashAlg   TEXT    NOT NULL,
+                CreateAt  TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UpdateAt  TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                Others    TEXT    NULL
             );
         ";
         conn.Execute(createTableSql);
@@ -68,8 +69,8 @@ public class SubjectDao : BaseDao
     public int Insert(Subject subject, IDbTransaction? tx = null)
     {
         const string sql = @"
-            INSERT INTO Subject (Name, Password, HashAlg, Others)
-            VALUES (@Name, @Password, @HashAlg, @Others)
+            INSERT INTO Subject (Name, Password, EncMethod, HashAlg, Others)
+            VALUES (@Name, @Password, @EncMethod, @HashAlg, @Others)
         ";
         if (tx != null)
         {
@@ -84,7 +85,12 @@ public class SubjectDao : BaseDao
     {
         const string sql = @"
             UPDATE Subject
-            SET Name = @Name, Password = @Password, HashAlg = @HashAlg, UpdateAt = CURRENT_TIMESTAMP, Others = @Others
+            SET Name      = @Name,
+                Password  = @Password,
+                EncMethod = @EncMethod,
+                HashAlg   = @HashAlg,
+                UpdateAt  = CURRENT_TIMESTAMP,
+                Others    = @Others
             WHERE Id = @Id
         ";
         if (tx != null)

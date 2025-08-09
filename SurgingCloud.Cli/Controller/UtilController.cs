@@ -9,9 +9,12 @@ public class UtilController
 {
     private readonly EncryptService _encryptService;
 
-    public UtilController(EncryptService encryptService)
+    private readonly HashService _hashService;
+
+    public UtilController(EncryptService encryptService, HashService hashService)
     {
         _encryptService = encryptService;
+        _hashService = hashService;
     }
 
     public async Task GeneratePassword(UtilOptions opt)
@@ -33,5 +36,22 @@ public class UtilController
 Hash algorithm: {opt.HashAlg}
 Generated archive password: {archivePassword}"
         ));
+    }
+
+    public async Task HashFilename(UtilOptions opt)
+    {
+        if (string.IsNullOrWhiteSpace(opt.Filename))
+        {
+            opt.Cw(OperationResult<object>.Fail("Please enter filename"));
+            return;
+        }
+
+        var hash = await _hashService.HashFilename(opt.Filename, opt.HashAlg);
+
+        opt.Cw(OperationResult<object>.Ok(
+            $@"Filename: {opt.Filename}
+Hash algorithm: {opt.HashAlg}
+Hashed filename: {hash}",
+            hash));
     }
 }

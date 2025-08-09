@@ -14,7 +14,8 @@ public static class ArchiveUtils
         int compressRate = 3,
         int? recoveryRate = 10,
         bool solidArchive = false,
-        string dictSize = "32"
+        string dictSize = "32",
+        int threads = 0
     )
     {
         if (!File.Exists(RarPath))
@@ -37,9 +38,9 @@ public static class ArchiveUtils
         foreach (var f in sources)
         {
             var file = f.Trim();
-            if (!File.Exists(file))
+            if (!(File.Exists(file) || Directory.Exists(file)))
             {
-                throw new FileNotFoundException($"File does not exist: {file}");
+                throw new FileNotFoundException($"File/Folder does not exist: {file}");
             }
 
             filesStr += $" \"{file}\" ";
@@ -78,6 +79,12 @@ public static class ArchiveUtils
             recoveryRateStr = $"-rr{recoveryRate}%";
         }
 
+        var threadStr = "";
+        if (1 <= threads && threads <= 64)
+        {
+            threadStr = $"-mt{threads}";
+        }
+
         // Solid archive
         var solidArchiveStr = solidArchive ? "-s" : "";
 
@@ -88,7 +95,7 @@ public static class ArchiveUtils
         // -ep1 Preserve the path of the compressed folder
         // -r0 Recursively compress folders, but do not recurse into the directory when specifying a file
         var argument =
-            $" a {solidArchiveStr} {dictSize} -ep1 -o- -m{compressRate} {pwd} {recoveryRateStr} -r0 \"{target}\" {filesStr}";
+            $" a {solidArchiveStr} {dictSize} -ep1 -o- -m{compressRate} {pwd} {recoveryRateStr} {threadStr} -r0 \"{target}\" {filesStr}";
 
 
         using var process = ProcessUtils.CreateProcess(RarPath, argument);
@@ -186,7 +193,7 @@ public static class ArchiveUtils
         var argument = $" lb -p{pwd} \"{archive}\"";
         using var process = ProcessUtils.CreateProcess(RarPath, argument);
         var (exitCode, output, _, _) = await ProcessUtils.RunProcess(process);
-        
+
         return exitCode == 0 ? output.Split("\n").ToList() : new List<string>();
     }
 

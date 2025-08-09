@@ -44,7 +44,8 @@ def get_item(iid: int, db_path: str):
     return item if item['Id'] else None
 
 
-def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: int):
+def recursive_enc_folder(folder_path: str, db_path: str, output_path: str,
+                         sid: int):
     folder_path = folder_path.replace('\\', '/')
     print('Encrypting', folder_path)
     if not isdir(folder_path):
@@ -56,14 +57,16 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: 
         print('Parent subject not found, sid =', sid)
         return
     parent_name = parent_subject['Name']
-    pwd = parent_subject['Password']  # every subject will have the same password
+    # every subject will have the same password
+    pwd = parent_subject['Password']
 
     for f in os.listdir(folder_path):
         f_abspath = join(folder_path, f)
         if isfile(f_abspath):
             result = subprocess.run([
-                surging_cloud_exe, 'enc', '--db', db_path, '--out-json', '--sid', str(sid),
-                '--byfile', '--src', f_abspath, '--out', output_path, '--ignore-dup',
+                surging_cloud_exe, 'enc', '--db', db_path, '--out-json',
+                '--sid', str(sid), '--src', f_abspath,
+                '--out', output_path, '--ignore-dup',
             ], capture_output=True, text=True, shell=True)
             # TODO: print something with the result if you wish
         elif isdir(f_abspath):
@@ -72,8 +75,9 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: 
             if not new_sid:
                 return
             result = subprocess.run([
-                surging_cloud_exe, 'enc', '--db', db_path, '--out-json', '--sid', str(sid),
-                '--byfile', '--src', f_abspath, '--out', output_path,
+                surging_cloud_exe, 'enc', '--db', db_path, '--out-json',
+                '--sid', str(sid), '--src', f_abspath,
+                '--out', output_path,
             ], capture_output=True, text=True, shell=True)
             result = json.loads(result.stdout)
             # TODO: print something with the result if you wish
@@ -82,7 +86,8 @@ def recursive_enc_folder(folder_path: str, db_path: str, output_path: str, sid: 
                 print(result['Message'])
                 return
             item = get_item(iid, db_path)
-            recursive_enc_folder(f_abspath, db_path, join(output_path, item['NameAfter']), new_sid)
+            recursive_enc_folder(f_abspath, db_path,
+                                 join(output_path, item['NameAfter']), new_sid)
 # --8<-- [end:doc]
 
 if __name__ == '__main__':

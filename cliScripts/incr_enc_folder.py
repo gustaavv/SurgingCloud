@@ -23,7 +23,6 @@ def incr_enc_folder(folder_path: str, db_path: str, output_path: str, sid: int):
             surging_cloud_exe, 'enc',
             '--db', db_path,
             '--sid', str(sid),
-            '--byfile',
             '--ignore-dup',
             '--src', f,
             '--out', output_path,

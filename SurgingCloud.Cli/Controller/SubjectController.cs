@@ -37,7 +37,7 @@ public class SubjectController
         });
 
         consoleTable.MaxWidth = int.MaxValue;
-        
+
         subjects.ForEach(s => { consoleTable.AddRow(s.Id, s.Name, s.Password, s.HashAlg); });
 
         consoleTable.Write();
@@ -46,7 +46,19 @@ public class SubjectController
     public async Task GetSubject(SubjectOptions opt)
     {
         var id = opt.SubjectId;
-        var subject = _subjectService.GetSubjectById(id);
+        var name = opt.Name;
+        Subject? subject = null;
+
+        // precedence: id, name
+        if (id >= 0)
+        {
+            subject = _subjectService.GetSubjectById(id);
+        }
+        else if (!string.IsNullOrWhiteSpace(name))
+        {
+            subject = _subjectService.GetSubjectByName(name);
+        }
+
         if (subject != null)
         {
             dynamic newObj = JsonUtils.ToObj<ExpandoObject>(JsonUtils.ToStr(subject))!;
@@ -64,9 +76,9 @@ public class SubjectController
     {
         opt.Name ??= "";
         opt.Name = opt.Name.Trim();
-        if (!(0 < opt.Name.Length && opt.Name.Length < 64))
+        if (!(opt.Name.Length > 0))
         {
-            opt.Cw(OperationResult<object>.Fail("Creation fails. Name must be between 1 and 64 characters"));
+            opt.Cw(OperationResult<object>.Fail("Creation fails. Name must contain at least 1 character"));
             return;
         }
 
@@ -77,7 +89,13 @@ public class SubjectController
             return;
         }
 
-        var subject = new Subject { Name = opt.Name, Password = opt.Password, HashAlg = opt.HashAlg };
+        var subject = new Subject
+        {
+            Name = opt.Name,
+            Password = opt.Password,
+            HashAlg = opt.HashAlg,
+            EncMethod = opt.EncMethod
+        };
         var result = _subjectService.CreateSubject(subject);
         opt.Cw(result);
     }
@@ -104,7 +122,7 @@ public class SubjectController
             Columns = new[] { "id", "name before", "name after", "item type", "hash before", "hash after" },
             EnableCount = true
         });
-        
+
         consoleTable.MaxWidth = int.MaxValue;
 
         items.ForEach(e =>

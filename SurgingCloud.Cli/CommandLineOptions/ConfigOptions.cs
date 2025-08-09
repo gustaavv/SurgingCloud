@@ -11,6 +11,9 @@ public class ConfigOptions : BaseOptions
     [Option('g', "get", HelpText = "Get current config", Default = false, SetName = "get")]
     public bool GetConfig { get; set; }
 
+    [Option('v', "validate", HelpText = "Validate config", Default = false, SetName = "validate")]
+    public bool ValidateConfig { get; set; }
+
     [Option("rar", HelpText = "Path to rar.exe")]
     public string? RarPath { get; set; }
 }

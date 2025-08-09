@@ -47,3 +47,13 @@ out: E:\backup\Pictures\6367a30064043fb1f227.rar
 - `Success`: a boolean value, indicating whether the operation succeeds.
 - `Message`: a string value, whose value is normally the same as the value when `--out-json` is disabled except for the database path verbose.
 - `Data`: value of any type, whose value may be useful to the scripts and is dependent on the operation. This field is `null` if no such data is provided. 
+
+## Backup database
+
+The argument `--bkp-db` allows you to back up the database file before doing any operation. It will duplicate the database file (suppose it is `data.db`) in the same folder, and rename it to `data.db.20250704060547283.bkp`. `20250704060547283` is the timestamp now, whose precision is millisecond.
+
+This argument will add the following output if `--out-json` is disabled:
+
+```
+Backup database file at E:\bkp\data.db.20250704060547283.bkp
+```

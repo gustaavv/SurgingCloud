@@ -30,4 +30,10 @@ public class ConfigController
         var result = _configService.UpdateConfig(config);
         opt.Cw(result);
     }
+
+    public void ValidateConfig(ConfigOptions opt)
+    {
+        var result = _configService.ValidateConfig();
+        opt.Cw(result);
+    }
 }

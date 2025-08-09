@@ -18,6 +18,11 @@ public record Subject
     /// Subject password. Stored in plan text.
     /// </summary>
     public string Password { get; set; }
+    
+    /// <summary>
+    /// Encryption method for all the items of the subject.
+    /// </summary>
+    public EncMethod EncMethod { get; set; } =  EncMethod.Rar;
 
     /// <summary>
     /// Hash algorithm for all the items of the subject.
