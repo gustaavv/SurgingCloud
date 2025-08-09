@@ -1,5 +1,5 @@
 ---
-title: Hello World
+title: Hello SurgingCloud
 ---
 
 This tutorial will walk you through the basic steps to use SurgingCloud.
