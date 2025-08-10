@@ -1,5 +1,5 @@
 ---
-title: 3rd-party library
+title: 3rd-party libraries
 ---
 
 This page lists the 3rd-party libraries this project uses.
@@ -26,4 +26,5 @@ This page lists the 3rd-party libraries this project uses.
 
 - mkdocs
 - mkdocs-material
+- Font Awesome
 - Twemoji

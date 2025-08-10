@@ -48,3 +48,9 @@ Update succeeds
 ```powershell
 .\SurgingCloud.Cli.exe config --validate --db "path/to/db"
 ```
+
+**Output**
+
+```
+Config validation succeeds
+```
